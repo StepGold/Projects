@@ -9,11 +9,12 @@ class Brick:
 
         self.borrow = []
         self.color = WHITE
+        self.color_index = 0
         self.rotate_left_matrix = []
     
     def block_field(self, field):
         for (x, y) in self.borrow:
-            field.borrow[y][x] = 1
+            field.borrow[y][x] = self.color_index
             
     def check_free(self, field, direction=None):
         if direction is None:
@@ -66,19 +67,21 @@ class Brick:
 
 
 class Brick_square(Brick):
-    def __init__(self, color):
+    def __init__(self, color, color_index):
         super().__init__()
         self.borrow = [[4, 0], [4, 1], [3, 0], [3, 1]]
         self.color = color
+        self.color_index = color_index
     
     def rotate(self, field, direction):
         pass
     
 class Brick_T(Brick):
-    def __init__(self, color):
+    def __init__(self, color, color_index):
         super().__init__()
         self.borrow = [[3, 0], [4, 1], [5, 0], [4, 0]]
         self.color = color
+        self.color_index = color_index
 
         self.rotate_left_matrix = [
             [[1, 1], [1, -1], [-1, -1], [0, 0]],

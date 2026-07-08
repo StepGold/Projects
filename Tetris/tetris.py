@@ -7,22 +7,26 @@ from Brick import Brick_T, Brick_square
 
 pygame.init()
 
-def new_random_brick():
-    color_index = random.randint(0, 6)
+def new_random_brick(field):
+    color_index = random.randint(1, 6)
     color = COLORS[color_index]
-    color = [0.8 * i for i in color]
 
     index = random.randint(0, 1) # 0, 6
 
     if index == 0:
-        brick = Brick_square(color)
+        brick = Brick_square(color, color_index)
     elif index == 1:
-        brick = Brick_T(color)
+        brick = Brick_T(color, color_index)
+
+    field.current_brick = brick
     
     return brick
 
 
-
+def printer(a):
+    for row in a:
+        print(row)
+    print("\n\n\n\n\n")
 
 
 screen = pygame.display.set_mode((WIDTH + 4 * CELL_SIZE, HEIGHT))
@@ -31,8 +35,7 @@ clock = pygame.time.Clock()
 
 
 field = Field()
-current_brick = new_random_brick()
-field.add_brick(current_brick)
+current_brick = new_random_brick(field)
 
 user_move_left = False
 user_move_right = False
@@ -61,8 +64,7 @@ while running:
 
     if current_brick.static:
         current_brick.block_field(field)
-        current_brick = new_random_brick()
-        field.add_brick(current_brick)
+        current_brick = new_random_brick(field)
     else:
 
         if user_move_left:
@@ -80,6 +82,8 @@ while running:
 
         if tick:
             current_brick.fall(field)
+            field.full_row()
+            #printer(field.borrow)
 
 
 

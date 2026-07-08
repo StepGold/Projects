@@ -3,7 +3,7 @@ import random
 
 from Constants import *
 from Field import Field
-from Brick import Brick_T, Brick_square 
+from Brick import Brick_T, Brick_square, Brick_Line
 
 pygame.init()
 
@@ -11,12 +11,14 @@ def new_random_brick(field):
     color_index = random.randint(1, 6)
     color = COLORS[color_index]
 
-    index = random.randint(0, 1) # 0, 6
+    index = random.randint(0, 2) # 0, 6
 
     if index == 0:
         brick = Brick_square(color, color_index)
     elif index == 1:
         brick = Brick_T(color, color_index)
+    elif index == 2:
+        brick = Brick_Line(color, color_index)
 
     field.current_brick = brick
     
@@ -35,12 +37,14 @@ clock = pygame.time.Clock()
 
 
 field = Field()
+printer(field.borrow)
 current_brick = new_random_brick(field)
 
 user_move_left = False
 user_move_right = False
 user_rotate_left = False
 user_rotate_right = False
+user_drop = False
 tick = 0
 
 running = True
@@ -57,6 +61,8 @@ while running:
                 user_rotate_left = True
             elif event.key == pygame.K_e:
                 user_rotate_right = True
+            elif event.key == pygame.K_s:
+                user_drop = True
 
 
 
@@ -79,6 +85,9 @@ while running:
         elif user_rotate_right:
             current_brick.rotate(field, 1)
             user_rotate_right = False
+        elif user_drop:
+            current_brick.drop(field)
+            user_drop = False
 
         if tick:
             current_brick.fall(field)

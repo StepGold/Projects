@@ -4,7 +4,7 @@ import pygame
 class Field:
     def __init__(self):
         self.current_brick = None
-        self.borrow = [[0 for i in range(W_COUNT)] + [1] for j in range(H_COUNT)] + [[1 for i in range(W_COUNT + 1)]] + [[0 for i in range(W_COUNT + 1)]]
+        self.borrow = [[0 for i in range(W_COUNT)] + [1] for j in range(H_COUNT)] + [[1 for i in range(W_COUNT + 1)]] + [[0 for i in range(W_COUNT + 1)]] + [[0 for i in range(W_COUNT + 1)]]
 
     def rows_fall(self, y):
         for height in range(y, 0, -1):

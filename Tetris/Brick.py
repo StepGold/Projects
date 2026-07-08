@@ -56,6 +56,11 @@ class Brick:
                 self.borrow[i][0] += x_shape
                 self.borrow[i][1] += y_shape
     
+    def drop(self, field):
+        while not self.static:
+            
+            self.fall(field)
+    
     def draw(self, screen):
         for x, y in self.borrow:
             pygame.draw.rect(
@@ -125,3 +130,44 @@ class Brick_T(Brick):
             if self.check_free_rotate(field, help_list):
                 self.borrow = help_list
                 self.pos = (self.pos + 3) % 4
+
+class Brick_Line(Brick):
+    def __init__(self, color, color_index):
+        super().__init__()
+        self.borrow = [[3, 0], [4, 0], [5, 0], [6, 0]]
+        self.color = color
+        self.color_index = color_index
+
+        self.rotate_matrix = [
+            [[1, 1], [0, 0], [-1, -1], [-2, -2]],
+            [[-1, -1], [0, 0], [1, 1], [2, 2]],
+        ]
+    
+    def rotate(self, field, direction):
+        if direction:
+            translations = self.rotate_matrix[self.pos]
+
+            help_list = []
+            for index in range(4):
+                x, y = self.borrow[index]
+                xx, yy = x + translations[index][0], y + translations[index][1]
+
+                help_list.append([xx, yy])
+
+            if self.check_free_rotate(field, help_list):
+                self.borrow = help_list
+                self.pos = (self.pos + 1) % 2
+
+        else:
+            translations = self.rotate_matrix[self.pos]
+
+            help_list = []
+            for index in range(4):
+                x, y = self.borrow[index]
+                xx, yy = x + translations[index][0], y + translations[index][1]
+
+                help_list.append([xx, yy])
+            
+            if self.check_free_rotate(field, help_list):
+                self.borrow = help_list
+                self.pos = (self.pos + 1) % 2
